@@ -10,6 +10,7 @@ class WatchdogComponent : public Component {
  public:
   void set_relay(switch_::Switch *relay) { this->relay_ = relay; }
   void set_timeout(uint32_t timeout_ms) { this->timeout_ms_ = timeout_ms; }
+  void set_web_server(web_server::WebServer *server) { this->web_server_ = server; }
 
   void setup() override;
   void loop() override;
@@ -17,6 +18,7 @@ class WatchdogComponent : public Component {
 
  private:
   switch_::Switch *relay_;
+  web_server::WebServer *web_server_;
   uint32_t timeout_ms_;
   uint32_t last_pet_time_;
 };

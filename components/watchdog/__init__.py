@@ -1,5 +1,6 @@
 import esphome.codegen as cg
 import esphome.config_validation as cv
+from esphome.components import web_server
 from esphome.const import CONF_ID
 from esphome.core import coroutine_with_priority
 
@@ -32,3 +33,8 @@ async def to_code(config):
 
     timeout_ms = config[CONF_TIMEOUT]
     cg.add(var.set_timeout(timeout_ms))
+
+    # Get the web_server component if it exists
+    if web_server.CONF_WEB_SERVER in cg.CORE.config.get(web_server.DOMAIN, {}):
+        ws = await cg.get_variable(web_server.CONF_WEB_SERVER)
+        cg.add(var.set_web_server(ws))
