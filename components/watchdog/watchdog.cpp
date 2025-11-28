@@ -10,7 +10,7 @@ void WatchdogComponent::setup() {
   this->last_pet_time_ = 0;
 
   // Get the web server singleton
-  auto *server = web_server::global_web_server;
+  auto *server = App.get_web_server();
   if (server == nullptr) {
     ESP_LOGE(TAG, "Web server not available!");
     return;
