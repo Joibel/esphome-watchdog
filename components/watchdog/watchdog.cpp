@@ -7,7 +7,7 @@ namespace watchdog {
 static const char *const TAG = "watchdog";
 
 void WatchdogComponent::setup() {
-  this->last_pet_time_ = millis();
+  this->last_pet_time_ = 0;
 
   // Register /pet endpoint
   this->web_server_->on("/pet", HTTP_GET, [this](AsyncWebServerRequest *req) {
