@@ -9,8 +9,15 @@ static const char *const TAG = "watchdog";
 void WatchdogComponent::setup() {
   this->last_pet_time_ = 0;
 
+  // Get the web server singleton
+  auto *server = web_server::global_web_server;
+  if (server == nullptr) {
+    ESP_LOGE(TAG, "Web server not available!");
+    return;
+  }
+
   // Register /pet endpoint
-  this->web_server_->on("/pet", HTTP_GET, [this](AsyncWebServerRequest *req) {
+  server->on("/pet", HTTP_GET, [this](AsyncWebServerRequest *req) {
     this->last_pet_time_ = millis();
     ESP_LOGD(TAG, "Pet received at %lums", this->last_pet_time_);
     req->send(200, "text/plain", "OK");
@@ -24,7 +31,7 @@ void WatchdogComponent::loop() {
   const uint32_t elapsed = now - this->last_pet_time_;
 
   if (this->last_pet_time_ == 0) {
-    return;  // Not initialized yet
+    return;
   }
 
   if (elapsed > this->timeout_ms_) {
