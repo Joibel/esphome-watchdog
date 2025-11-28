@@ -1,0 +1,26 @@
+#pragma once
+#include "esphome.h"
+#include "esphome/components/web_server/web_server.h"
+
+namespace esphome {
+namespace watchdog {
+
+class WatchdogComponent : public Component {
+ public:
+  void set_relay(Switch *relay) { this->relay_ = relay; }
+  void set_timeout(uint32_t timeout_ms) { this->timeout_ms_ = timeout_ms; }
+  void set_web_server(web_server::WebServer *web_server) { this->web_server_ = web_server; }
+
+  void setup() override;
+  void loop() override;
+  float get_setup_priority() const override { return setup_priority::AFTER_WIFI; }
+
+ private:
+  Switch *relay_;
+  web_server::WebServer *web_server_;
+  uint32_t timeout_ms_;
+  uint32_t last_pet_time_;
+};
+
+}  // namespace watchdog
+}  // namespace esphome
