@@ -2,7 +2,7 @@ import esphome.codegen as cg
 import esphome.config_validation as cv
 from esphome.components import web_server
 from esphome.const import CONF_ID
-from esphome.core import coroutine_with_priority
+from esphome.core import coroutine_with_priority, CORE
 
 CODEOWNERS = ["@Joibel"]
 VERSION = "1.0.0"
@@ -35,6 +35,8 @@ async def to_code(config):
     cg.add(var.set_timeout(timeout_ms))
 
     # Get the web_server component if it exists
-    if web_server.CONF_WEB_SERVER in cg.CORE.config.get(web_server.DOMAIN, {}):
-        ws = await cg.get_variable(web_server.CONF_WEB_SERVER)
-        cg.add(var.set_web_server(ws))
+    if web_server.DOMAIN in CORE.config:
+        ws_config = CORE.config[web_server.DOMAIN]
+        if isinstance(ws_config, list) and len(ws_config) > 0:
+            ws = await cg.get_variable(ws_config[0][CONF_ID])
+            cg.add(var.set_web_server(ws))
