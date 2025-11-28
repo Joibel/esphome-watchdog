@@ -1,8 +1,10 @@
 import esphome.codegen as cg
 import esphome.config_validation as cv
-from esphome.components import web_server
 from esphome.const import CONF_ID
 from esphome.core import coroutine_with_priority
+
+CODEOWNERS = ["@Joibel"]
+VERSION = "1.0.0"
 
 watchdog_ns = cg.esphome_ns.namespace("watchdog")
 WatchdogComponent = watchdog_ns.class_("WatchdogComponent", cg.Component)
@@ -18,8 +20,6 @@ CONFIG_SCHEMA = cv.Schema(
     }
 ).extend(cv.COMPONENT_SCHEMA)
 
-CODEOWNERS = ["@Joibel"]
-VERSION = "1.0.0"
 
 @coroutine_with_priority(40.0)
 async def to_code(config):
@@ -32,7 +32,3 @@ async def to_code(config):
 
     timeout_ms = config[CONF_TIMEOUT]
     cg.add(var.set_timeout(timeout_ms))
-
-    # Ensure web_server is available
-    wb = await cg.get_variable(web_server.CONF_WEB_SERVER)
-    cg.add(var.set_web_server(wb))
