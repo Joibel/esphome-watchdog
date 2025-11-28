@@ -18,6 +18,8 @@ CONFIG_SCHEMA = cv.Schema(
     }
 ).extend(cv.COMPONENT_SCHEMA)
 
+CODEOWNERS = ["@Joibel"]
+VERSION = "1.0.0"
 
 @coroutine_with_priority(40.0)
 async def to_code(config):
